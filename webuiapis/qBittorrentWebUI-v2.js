@@ -1,5 +1,7 @@
 RTA.clients.qBittorrentV2Adder = function(server, data, torrentname, label, dir) {
 	var rootUrl = (server.hostsecure ? "https" : "http") + "://" + server.host + ":" + server.port;
+	console.log(dir);
+	if(dir == undefined) dir = server.qbitdirectory;
 
 	// execute login request
 	fetch(rootUrl + "/api/v2/auth/login", {
@@ -26,7 +28,7 @@ RTA.clients.qBittorrentV2Adder = function(server, data, torrentname, label, dir)
 				message.append("fileselect[]", dataBlob, myName);
 			}
 
-			if(dir) {
+			if(dir && dir !=="") {
 				message.append("savepath", dir);
 			}
 

@@ -259,3 +259,38 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 		chrome.tabs.create({ url: url });
 	}
 });
+
+function add(down) {
+    console.log(down);
+    // if (enabled == 0) {
+    //     //var notification = new Notification("添加到aria2当前暂停", {body: "如需启用点击工具栏中图标"});
+    //     return 0;
+    // }
+	const servers = JSON.parse(localStorage.getItem("servers"));
+	if(servers.length > 0) {
+		const server = servers[0];
+		res = localStorage.getItem('linkmatches').split('~');
+		for(mkey in res) {
+			if (down.url.match(new RegExp(res[mkey], "g"))) {
+				if(down.filename.endsWith(".torrent")){
+					RTA.getTorrent(server, down.url);
+					chrome.downloads.cancel(down.id, function(s) {});
+					break;	
+				}
+			}
+		}
+	}
+
+    // if (Math.abs(down.fileSize) > size) {
+    //     var ifpostback = send(down);
+    //     if (ifpostback == "base64_error") {
+    //         var notification = new Notification("成功！", { body: "添加任务至 aria2 出错！" });
+    //     } else {
+    //         chrome.downloads.cancel(down.id, function(s) {});
+    //         var notification = new Notification("成功！", { body: "下载已送往aria2，请前往确认" });
+    //     }
+    // }
+}
+
+chrome.downloads.onDeterminingFilename.addListener(add);
+
